@@ -28,9 +28,9 @@
         // var_dump($_POST);
         // echo "</pre>";
         
-        echo "<pre>";
-        var_dump($_FILES);
-        echo "</pre>";
+        // echo "<pre>";
+        // var_dump($_FILES);
+        // echo "</pre>";
 
         $titulo = mysqli_real_escape_string($db, $_POST['titulo']);
         $precio = mysqli_real_escape_string($db, $_POST['precio']);
@@ -90,7 +90,7 @@
         //Revisar que el arreglo de errores esta vacio
         if(empty($errores)) {
 
-            /* Subida de archivos */
+            /** SUBIDA DE ARCHIVOS **/
 
             //Crear una carpeta
             $carpetaImagenes = '../../imagenes/';
@@ -100,13 +100,13 @@
             }
 
             //Generar nombre unico
-            $nombreImagen = md5( uniqid(rand(), true)) . ".jpg";
-
+            $nombreImagen = md5( uniqid(rand(), true) ) . ".jpg";
+          
             //Subir la imagen
-            move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . $nombreImagen);
+            move_uploaded_file($imagen['tmp_name'],$carpetaImagenes . $nombreImagen);
 
             //Insertar en la base de datos
-            $query = " INSERT INTO propiedades (titulo, precio, imagen, descripcion, habitaciones, wc, estacionamiento, creado, vendedores_id ) VALUES ( '$titulo' , '$precio', '$$nombreImagen', '$descripcion', '$habitaciones', '$wc', '$estacionamiento', '$creado',  '$vendedores_id' )";
+            $query = " INSERT INTO propiedades (titulo, precio, imagen, descripcion, habitaciones, wc, estacionamiento, creado, vendedores_id ) VALUES ( '$titulo', '$precio', '$nombreImagen', '$descripcion', '$habitaciones', '$wc', '$estacionamiento', '$creado', '$vendedores_id' )";
 
             // echo $query;
 
@@ -143,17 +143,16 @@
                 <legend>Información General</legend>
 
                 <label for="titulo">Titulo:</label>
-                <input type="text" id="titulo" name="titulo" placeholder="Titulo Propiedad" value="<?php echo $titulo ?>"/>
+                <input type="text" id="titulo" name="titulo" placeholder="Titulo Propiedad" value="<?php echo $titulo; ?>"/>
 
                 <label for="precio">Precio:</label>
-                <input type="number" id="precio" name="precio" placeholder="Precio Propiedad" value="<?php echo $precio ?>"/>
+                <input type="number" id="precio" name="precio" placeholder="Precio Propiedad" value="<?php echo $precio; ?>"/>
 
                 <label for="imagen">Imagen:</label>
-                <!-- El accept delimita el tipo de archivos que se puede elegir -->
-                <input type="file" id="imagen" accept="image/jpeg, image/png" name="imagen"/>
+                <input type="file" id="imagen" accept="image/jpeg, image/png" name="imagen">
 
                 <label for="descripcion">Descripción:</label>
-                <textarea id="descripcion" name="descripcion"><?php echo $descripcion ?></textarea>
+                <textarea id="descripcion" name="descripcion"><?php echo $descripcion; ?></textarea>
 
             </fieldset>
 
@@ -161,13 +160,13 @@
                 <legend>Información Propiedad</legend>
 
                 <label for="habitaciones">Habitaciones:</label>
-                <input type="number" id="habitaciones" name="habitaciones" placeholder="Ej: 3" min="1" max="9" value="<?php echo $habitaciones ?>"/>
+                <input type="number" id="habitaciones" name="habitaciones" placeholder="Ej: 3" min="1" max="9" value="<?php echo $habitaciones; ?>"/>
 
                 <label for="wc">Baños:</label>
-                <input type="number" id="wc" name="wc" placeholder="Ej: 3" min="1" max="9" value="<?php echo $wc ?>"/>
+                <input type="number" id="wc" name="wc" placeholder="Ej: 3" min="1" max="9" value="<?php echo $wc; ?>"/>
 
                 <label for="estacionamiento">Estacionamiento:</label>
-                <input type="number" id="estacionamiento" name="estacionamiento" placeholder="Ej: 3" min="1" max="9" value="<?php echo $estacionamiento ?>"/>
+                <input type="number" id="estacionamiento" name="estacionamiento" placeholder="Ej: 3" min="1" max="9" value="<?php echo $estacionamiento; ?>"/>
 
             </fieldset>
 
@@ -178,7 +177,7 @@
                     <option value="">-- Seleccione --</option>
                     <?php while($vendedor = mysqli_fetch_assoc($resultado) ): ?>
 
-                        <option <?php echo $vendedores_id === $vendedor['id'] ? 'selected' : ''; ?>  value="<?php echo $vendedor['id'] ?>"> <?php echo $vendedor['nombre'] . " " . $vendedor['apellido']; ?> </option>
+                        <option <?php echo $vendedor === $vendedor['id'] ? 'selected' : ''; ?>  value="<?php echo $vendedor['id'] ?>"> <?php echo $vendedor['nombre'] . " " . $vendedor['apellido']; ?> </option>
 
                     <?php endwhile ?>
                 </select>

@@ -74,12 +74,14 @@
 /*Menu de Hamburguesa*/
 .mobile-menu {
 
+    margin-top: 1.5rem;
     @include tablet {
         display: none;
+        
     }
 
     img {
-        width: 5rem;
+        width: 3.5rem;
     }
 }
 
