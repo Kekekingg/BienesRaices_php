@@ -15,7 +15,7 @@
 
         <h2>Llene el formulario de contacto</h2>
 
-        <form action="" class="formulario">
+        <form class="formulario">
             <!--Fieldset es para campos relacionados o varias cosas en comun-->
             <fieldset>
                 <legend>Informacion Personal</legend>
