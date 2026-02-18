@@ -1,5 +1,12 @@
 <?php 
 
+    require '../../includes/funciones.php';
+    $auth = isAuth();
+
+    if(!$auth) {
+        header('Location: /');
+    }
+
     //Base de Datos
     require '../../includes/config/database.php';
     $db = conectarDB();
@@ -121,7 +128,7 @@
 
     }
 
-    require '../../includes/funciones.php';
+    
     //El inicio ayuda agregar el fondo
     incluirTemplate('header');
 ?>
