@@ -6,8 +6,8 @@
     if(!$id) {
         header('Location: /');
     }
-    //Importar la conexion BD
-    require 'includes/config/database.php';
+    
+    require 'includes/app.php';
     $db = conectarDB();
 
     //Consultar 
@@ -23,7 +23,7 @@
     $propiedad = mysqli_fetch_assoc($resultado);
 
     
-    require 'includes/funciones.php';
+    
     //El inicio ayuda agregar el fondo
     incluirTemplate('header');
 ?>

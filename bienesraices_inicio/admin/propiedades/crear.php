@@ -1,14 +1,12 @@
 <?php 
 
-    require '../../includes/funciones.php';
-    $auth = isAuth();
+    require '../../includes/app.php';
 
-    if(!$auth) {
-        header('Location: /');
-    }
+    use App\Propiedad;
+
+    isAuth();
 
     //Base de Datos
-    require '../../includes/config/database.php';
     $db = conectarDB();
 
     //Consultar para obtener los vendedores
@@ -31,13 +29,16 @@
     //Valida que el request method sea de tipo post
     if($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+        $propiedad = new Propiedad($_POST);
+
+        $propiedad->guardar();
         // echo "<pre>";
         // var_dump($_POST);
         // echo "</pre>";
         
-        // echo "<pre>";
-        // var_dump($_FILES);
-        // echo "</pre>";
+        echo "<pre>";
+        var_dump($_FILES);
+        echo "</pre>";
 
         $titulo = mysqli_real_escape_string($db, $_POST['titulo']);
         $precio = mysqli_real_escape_string($db, $_POST['precio']);
@@ -108,15 +109,11 @@
 
             //Generar nombre unico
             $nombreImagen = md5( uniqid(rand(), true) ) . ".jpg";
-          
+
             //Subir la imagen
             move_uploaded_file($imagen['tmp_name'],$carpetaImagenes . $nombreImagen);
 
-            //Insertar en la base de datos
-            $query = " INSERT INTO propiedades (titulo, precio, imagen, descripcion, habitaciones, wc, estacionamiento, creado, vendedores_id ) VALUES ( '$titulo', '$precio', '$nombreImagen', '$descripcion', '$habitaciones', '$wc', '$estacionamiento', '$creado', '$vendedores_id' )";
-
             // echo $query;
-
             
             $resultado = mysqli_query($db, $query);
 

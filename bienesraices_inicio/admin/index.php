@@ -1,7 +1,7 @@
 <?php 
     
     require '../includes/funciones.php';
-    $auth = isAuth();
+    isAuth();
 
     if(!$auth) {
         header('Location: /');

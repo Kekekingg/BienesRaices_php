@@ -1,6 +1,7 @@
 <?php 
     //Importar la conexion
-    require 'includes/config/database.php';
+    //Incluye el header
+    require 'includes/app.php';
     $db = conectarDB();
 
     //Proteccion de fallas
@@ -57,8 +58,7 @@
 
     };
 
-    //Incluye el header
-    require 'includes/funciones.php';
+    
     //El inicio ayuda agregar el fondo
     incluirTemplate('header');
 ?>
