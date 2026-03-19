@@ -2,6 +2,7 @@
 
 define('TEMPLATES_URL', __DIR__ . '/templates');
 define('FUNCIONES_URL', __DIR__ . '/funciones');
+define('CARPETA_IMAGENES', __DIR__ . '/../imagenes/');
 
 function incluirTemplate (string $nombre, bool $inicio = false) {    
     include TEMPLATES_URL . "/$nombre.php";
@@ -21,4 +22,10 @@ function debuguear($variable) {
     echo "</pre>";
 
     exit;
+}
+
+// Escapa / Sanitiza el HTML
+function sanitize($html): string {
+    $s = htmlspecialchars($html);
+    return $s;
 }

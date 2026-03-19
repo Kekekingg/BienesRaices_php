@@ -1,0 +1,41 @@
+<?php return array(
+    'root' => array(
+        'name' => 'erikm/bienesraices_inicio',
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => '7f0965328a188144a191cc74321a1541151a5971',
+        'type' => 'project',
+        'install_path' => __DIR__ . '/../../',
+        'aliases' => array(),
+        'dev' => true,
+    ),
+    'versions' => array(
+        'erikm/bienesraices_inicio' => array(
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => '7f0965328a188144a191cc74321a1541151a5971',
+            'type' => 'project',
+            'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'intervention/gif' => array(
+            'pretty_version' => '4.2.4',
+            'version' => '4.2.4.0',
+            'reference' => 'c3598a16ebe7690cd55640c44144a9df383ea73c',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../intervention/gif',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'intervention/image' => array(
+            'pretty_version' => '3.11.7',
+            'version' => '3.11.7.0',
+            'reference' => '2159bcccff18f09d2a392679b81a82c5a003f9bb',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../intervention/image',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+    ),
+);
