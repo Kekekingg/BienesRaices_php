@@ -2,16 +2,20 @@
     <legend>Información General</legend>
 
     <label for="titulo">Titulo:</label>
-    <input type="text" id="titulo" name="titulo" placeholder="Titulo Propiedad" value="<?php echo sanitize($propiedad->titulo); ?>"/>
+    <input type="text" id="titulo" name="propiedad[titulo]" placeholder="Titulo Propiedad" value="<?php echo sanitize($propiedad->titulo); ?>"/>
 
     <label for="precio">Precio:</label>
-    <input type="number" id="precio" name="precio" placeholder="Precio Propiedad" value="<?php echo sanitize($propiedad->precio); ?>"/>
+    <input type="number" id="precio" name="propiedad[precio]" placeholder="Precio Propiedad" value="<?php echo sanitize($propiedad->precio); ?>"/>
 
     <label for="imagen">Imagen:</label>
-    <input type="file" id="imagen" accept="image/jpeg, image/png" name="imagen">
+    <input type="file" id="imagen" accept="image/jpeg, image/png" name="propiedad[imagen]">
+
+    <?php if($propiedad->imagen): ?>
+        <img src="/imagenes/<?php echo $propiedad->imagen ?>" class="imagen-small">
+    <?php endif; ?>
 
     <label for="descripcion">Descripción:</label>
-    <textarea id="descripcion" name="descripcion"><?php echo sanitize($propiedad->descripcion); ?></textarea>
+    <textarea id="descripcion" name="propiedad[descripcion]"><?php echo sanitize($propiedad->descripcion); ?></textarea>
 
 </fieldset>
 
@@ -19,26 +23,16 @@
     <legend>Información Propiedad</legend>
 
     <label for="habitaciones">Habitaciones:</label>
-    <input type="number" id="habitaciones" name="habitaciones" placeholder="Ej: 3" min="1" max="9" value="<?php echo sanitize($propiedad->habitaciones); ?>"/>
+    <input type="number" id="habitaciones" name="propiedad[habitaciones]" placeholder="Ej: 3" min="1" max="9" value="<?php echo sanitize($propiedad->habitaciones); ?>"/>
 
     <label for="wc">Baños:</label>
-    <input type="number" id="wc" name="wc" placeholder="Ej: 3" min="1" max="9" value="<?php echo sanitize($propiedad->wc); ?>"/>
+    <input type="number" id="wc" name="propiedad[wc]" placeholder="Ej: 3" min="1" max="9" value="<?php echo sanitize($propiedad->wc); ?>"/>
 
     <label for="estacionamiento">Estacionamiento:</label>
-    <input type="number" id="estacionamiento" name="estacionamiento" placeholder="Ej: 3" min="1" max="9" value="<?php echo sanitize($propiedad->estacionamiento); ?>"/>
+    <input type="number" id="estacionamiento" name="propiedad[estacionamiento]" placeholder="Ej: 3" min="1" max="9" value="<?php echo sanitize($propiedad->estacionamiento); ?>"/>
 
 </fieldset>
 
 <fieldset>
     <legend>Vendedor</legend>
-
-    <select name="vendedores_id">
-        <option value="">-- Seleccione --</option>
-        <?php while($vendedor = mysqli_fetch_assoc($resultado) ): ?>
-
-            <option <?php echo $vendedores_id == $vendedor['id'] ? 'selected' : ''; ?> value="<?php echo $vendedor['id'] ?>"> <?php echo $vendedor['nombre'] . " " . $vendedor['apellido']; ?> </option>
-
-        <?php endwhile ?>
-    </select>
-
 </fieldset>

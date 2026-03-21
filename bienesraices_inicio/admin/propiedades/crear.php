@@ -24,7 +24,7 @@ $propiedad = new Propiedad;
     //Valida que el request method sea de tipo post
     if($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-        $propiedad = new Propiedad($_POST);
+        $propiedad = new Propiedad($_POST['propiedad']);
 
         // conservar valores para re-renderizar el formulario si hay error
         $titulo = $propiedad->titulo;
@@ -39,9 +39,9 @@ $propiedad = new Propiedad;
         $nombreImagen = md5( uniqid(rand(), true) ) . ".jpg";
 
         //Configuracion del manager
-        if(!empty($_FILES['imagen']['tmp_name'])) {
+        if(!empty($_FILES['propiedad']['tmp_name']['imagen'])) {
             $manager = new Image(Driver::class);
-            $imagen = $manager->read($_FILES['imagen']['tmp_name'])->cover(800,600);
+            $imagen = $manager->read($_FILES['propiedad']['tmp_name']['imagen'])->cover(800,600);
             $propiedad->setImagen($nombreImagen);
         }
 
@@ -59,7 +59,7 @@ $propiedad = new Propiedad;
             //Guarda la img en el servidor
             $imagen->save(CARPETA_IMAGENES . $nombreImagen);
 
-            $resultado= $propiedad->guardar();
+            $resultado = $propiedad->guardar();
             if($resultado) {
                 //Redireccionar al usuario
                 header('Location: /admin?resultado=1');

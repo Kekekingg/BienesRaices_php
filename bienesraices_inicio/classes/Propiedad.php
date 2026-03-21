@@ -43,6 +43,15 @@ class Propiedad {
     }
 
     public function guardar() {
+        if (isset($this->id)) {
+            //Actualizar
+            $this->actualizar();
+        } else {
+            // Crear un nuevo registro
+            $this->crear();
+        }
+    }
+    public function crear() {
 
         // Sanitizar los datos
         $atributos = $this->sanitizarDatos();
@@ -56,11 +65,29 @@ class Propiedad {
 
         $resultado = self::$db->query($query);
 
-        if(!$resultado) {
-            error_log('Error SQL Propiedad->guardar: ' . self::$db->error);
+        return $resultado;
+    }
+
+    public function actualizar() {
+        // Sanitizar los datos
+        $atributos = $this->sanitizarDatos();
+
+        $valores = []; //Va al objeto en memoria y une atributos con valores
+        foreach($atributos as $key => $value) {
+            $valores[] = "{$key}='{$value}'";
         }
 
-        return $resultado;
+        $query = " UPDATE propiedades SET ";
+        $query .= join(',',$valores );
+        $query .= " WHERE id = '" . self::$db->escape_string($this->id) . "' ";
+        $query .= " LIMIT 1 ";
+
+        $resultado = self::$db->query($query);
+
+        if($resultado) {
+            // Redireccionar al usuario.
+            header('Location: /admin?resultado=2');
+        }
     }
 
     // Identificar y unir los atributos de la BD
@@ -127,18 +154,37 @@ class Propiedad {
     }
 
     public function setImagen($imagen) {
+        //Elimina la imagen previa
+
+        if(isset($this->id)) {
+            //Comprobar si existe el archivo
+            $exist = file_exists(CARPETA_IMAGENES . $this->imagen);
+            if($exist) {
+                unlink(CARPETA_IMAGENES . $this->imagen);
+            }
+        }
+
+        //Asigna el atributo de imagen el nombre de la imagen
         if($imagen) {
             $this->imagen = $imagen;
         }
     }
 
-    //Lista todas las propiedades
+    //Lista todas los registros
     public static function all() {
         $query = "SELECT * FROM propiedades";//Retorna un arreglo
 
         $resultado = self::consultarSQL($query);
 
         return $resultado;
+    }
+
+    // Busca un resgistro por su ID
+    public static function find($id) {
+        $query = "SELECT * FROM propiedades WHERE id = $id";
+
+        $resultado = self::consultarSQL($query);
+        return array_shift($resultado);//Retorna el primer elemento de un arreglo
     }
 
     public static function consultarSQL($query){
@@ -172,4 +218,14 @@ class Propiedad {
         return $objeto;
     }
     /* FIN DE LISTA DE LAS PROPIEDADES */
+
+    //Sincroniza el objeto en memoria con los cambios realizados por el usuario
+    public function sincronizar($args = []) {
+        //Rescribe cada atributo del objeto en memoria
+        foreach($args as $key => $value) { //Key/value por que es un arr asociativo
+            if(property_exists($this, $key ) && !is_null($value)) {
+                $this->$key = $value;
+            }
+        }
+    }
 }
