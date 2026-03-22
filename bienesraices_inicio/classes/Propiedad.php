@@ -2,6 +2,8 @@
 
 namespace App;
 
+use mysqli;
+
 use function strlen;
 
 class Propiedad {
@@ -30,7 +32,7 @@ class Propiedad {
     }
 
     public function __construct($args = []) {
-        $this->id = $args['id'] ?? '';
+        $this->id = $args['id'] ?? null;
         $this->titulo = $args['titulo'] ?? '';
         $this->precio = $args['precio'] ?? '';
         $this->imagen = $args['imagen'] ?? '';
@@ -43,7 +45,7 @@ class Propiedad {
     }
 
     public function guardar() {
-        if (isset($this->id)) {
+        if (!is_null($this->id)) {
             //Actualizar
             $this->actualizar();
         } else {
@@ -52,6 +54,8 @@ class Propiedad {
         }
     }
     public function crear() {
+        // Asignar el próximo ID disponible
+        $this->id = self::obtenerProximoId();
 
         // Sanitizar los datos
         $atributos = $this->sanitizarDatos();
@@ -65,7 +69,10 @@ class Propiedad {
 
         $resultado = self::$db->query($query);
 
-        return $resultado;
+        if($resultado) {
+            //Redireccionar al usuario
+            header('Location: /admin?resultado=1');
+        }
     }
 
     public function actualizar() {
@@ -90,12 +97,26 @@ class Propiedad {
         }
     }
 
+    // Eliminar un registro
+    public function eliminar() {
+         //Eliminar la propiedad
+        $query = "DELETE FROM propiedades WHERE id = " . self::$db->escape_string($this->id) . " LIMIT 1";
+
+        $resultado = self::$db->query($query);
+
+        if($resultado) {
+            $this->borrarImagen();
+            header('Location: /admin?resultado=3');
+        } 
+    }
+
     // Identificar y unir los atributos de la BD
     public function atributos() {
         $atributos = [];
 
         foreach(self::$columnasDB as $columna) {
-            if($columna === 'id') continue; //Ignora el Id
+            // Incluir el id solo si ya está asignado (para creación con ID específico)
+            if($columna === 'id' && !isset($this->id)) continue;
             $atributos[$columna] = $this->$columna;
         }
         return $atributos;
@@ -109,6 +130,15 @@ class Propiedad {
             $sanitizado[$key] = self::$db->escape_string($value);
         }
         return $sanitizado;
+    }
+
+    // Elimina el archivo
+    public function borrarImagen() {
+        //Comprobar si existe el archivo
+        $exist = file_exists(CARPETA_IMAGENES . $this->imagen);
+        if($exist) {
+            unlink(CARPETA_IMAGENES . $this->imagen);
+        }
     }
 
     // Validacion
@@ -156,12 +186,8 @@ class Propiedad {
     public function setImagen($imagen) {
         //Elimina la imagen previa
 
-        if(isset($this->id)) {
-            //Comprobar si existe el archivo
-            $exist = file_exists(CARPETA_IMAGENES . $this->imagen);
-            if($exist) {
-                unlink(CARPETA_IMAGENES . $this->imagen);
-            }
+        if(!is_null($this->id)) {
+            $this->borrarImagen();
         }
 
         //Asigna el atributo de imagen el nombre de la imagen
@@ -225,6 +251,30 @@ class Propiedad {
         foreach($args as $key => $value) { //Key/value por que es un arr asociativo
             if(property_exists($this, $key ) && !is_null($value)) {
                 $this->$key = $value;
+            }
+        }
+    }
+
+    // Obtiene el próximo ID disponible (reutiliza huecos y reinicia cuando esté vacío)
+    public static function obtenerProximoId() {
+        // Obtener todos los IDs existentes ordenados
+        $query = "SELECT id FROM propiedades ORDER BY id ASC";
+        $resultado = self::$db->query($query);
+        
+        $ids = [];
+        while($fila = $resultado->fetch_assoc()) {
+            $ids[] = $fila['id'];
+        }
+        
+        // Si no hay IDs, empezar desde 1
+        if(empty($ids)) {
+            return 1;
+        }
+        
+        // Buscar el primer hueco en la secuencia
+        for($i = 1; ; $i++) {
+            if(!in_array($i, $ids)) {
+                return $i;
             }
         }
     }

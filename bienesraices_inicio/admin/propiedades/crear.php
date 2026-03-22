@@ -59,11 +59,8 @@ $propiedad = new Propiedad;
             //Guarda la img en el servidor
             $imagen->save(CARPETA_IMAGENES . $nombreImagen);
 
-            $resultado = $propiedad->guardar();
-            if($resultado) {
-                //Redireccionar al usuario
-                header('Location: /admin?resultado=1');
-            }
+            //Guarda en la BD
+            $propiedad->guardar();
         }
     }
         //El inicio ayuda agregar el fondo

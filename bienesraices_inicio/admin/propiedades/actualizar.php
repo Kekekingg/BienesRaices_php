@@ -18,7 +18,6 @@
     // Obtener los datos de la propiedad
     $propiedad = Propiedad::find($id);
 
-
     // Consultar para obtener los vendedores
     $consulta = "SELECT * FROM vendedores";
     $resultado = mysqli_query($db, $consulta);
