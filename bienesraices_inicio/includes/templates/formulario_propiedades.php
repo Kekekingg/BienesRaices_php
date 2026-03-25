@@ -35,4 +35,17 @@
 
 <fieldset>
     <legend>Vendedor</legend>
+    <label for="vendedor">Vendedor</label>
+    <select name="vendedor[vendedores_id]" id="vendedor">
+        <option selected value="">-- Seleccione --</option>
+
+        <?php foreach($vendedores as $vendedor): ?>
+            <option 
+                <?php echo $vendedor->vendedores_id === $vendedor->id ? 'selected': '' ?>
+                value="<?php echo sanitize($vendedor->id) ?>">
+                <?php echo sanitize($vendedor->nombre) . " " . sanitize($vendedor->apellido); ?>
+            </option>
+        <?php endforeach; ?>
+
+    </select>
 </fieldset>

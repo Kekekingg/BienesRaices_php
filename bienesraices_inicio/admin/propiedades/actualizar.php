@@ -1,6 +1,7 @@
 <?php 
 
     use App\Propiedad;
+    use App\Vendedor;
     use Intervention\Image\Drivers\Gd\Driver;
     use Intervention\Image\ImageManager as Image;
 
@@ -18,9 +19,8 @@
     // Obtener los datos de la propiedad
     $propiedad = Propiedad::find($id);
 
-    // Consultar para obtener los vendedores
-    $consulta = "SELECT * FROM vendedores";
-    $resultado = mysqli_query($db, $consulta);
+    //Consulta para obtener todos los vendedores
+    $vendedores = Vendedor::all();
 
     // Arreglo con mensajes de errores
     $errores = Propiedad::getErrores();
@@ -39,15 +39,17 @@
         //Generar nombre unico
         $nombreImagen = md5( uniqid(rand(), true) ) . ".jpg";
 
-        if(!empty($_FILES['propiedad']['tmp_name']['imagen'])) {
+        if($_FILES['propiedad']['tmp_name']['imagen']) {
             $manager = new Image(Driver::class);
             $imagen = $manager->read($_FILES['propiedad']['tmp_name']['imagen'])->cover(800,600);
             $propiedad->setImagen($nombreImagen);
         }
 
         if(empty($errores)) {
-            // Almacenar la imagen
-            $imagen->save(CARPETA_IMAGENES . $nombreImagen);
+            if($_FILES['propiedad']['tmp_name']['imagen']) {
+                // Almacenar la imagen
+                $imagen->save(CARPETA_IMAGENES . $nombreImagen);
+            }
 
             $propiedad->guardar();
         }
